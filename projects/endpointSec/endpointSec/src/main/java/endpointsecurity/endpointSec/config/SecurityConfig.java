@@ -2,6 +2,7 @@ package endpointsecurity.endpointSec.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.httpBasic()
                 .and().authorizeRequests()
+
+//                AUTHORIZATION RULES
 //                matcher method + authorization rule
 //                .anyRequest().authenticated() // endpoint level authorization
 //                .anyRequest().permitAll() // not allowed users with failed authentication
@@ -24,9 +27,19 @@ public class SecurityConfig {
 //                .anyRequest().hasAnyAuthority("read", "write")
 //                .anyRequest().hasRole("ADMIN")
 //                .anyRequest().hasAnyRole("ADMIN", "USER")
-                .anyRequest().access("isAuthenticated() and hasAuthority('read')")
+//                .anyRequest().access("isAuthenticated() and hasAuthority('read')") // SpEL rules
 //                .anyRequest().denyAll() // all requests denied; recommended at the end of this chain
-                .and().build();
+
+//                MATCHER METHODS
+                .mvcMatchers("/end1/**").authenticated()
+                .mvcMatchers(HttpMethod.POST,"/end2/**").hasAuthority("write")
+                .mvcMatchers(HttpMethod.GET,"/end2/**").hasAnyAuthority("read")
+                .and().csrf().disable() // DON'T DO THIS IN PROD!!! Just to make requests work in Postman
+
+
+//                can use ant expressions such as /endpoint/abc/*/def, where * can be any path
+
+                .build();
 
     }
 
