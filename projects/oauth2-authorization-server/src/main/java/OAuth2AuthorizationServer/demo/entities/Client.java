@@ -109,6 +109,7 @@ public class Client {
                 .clientAuthenticationMethod(new ClientAuthenticationMethod(client.getAuthMethod()))
                 .authorizationGrantType(new AuthorizationGrantType(client.getGrantType()))
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .tokenSettings(TokenSettings.builder()
 //            .accessTokenFormat(OAuth2TokenFormat.REFERENCE) // opaque
                         .accessTokenTimeToLive(Duration.ofHours(24)).build())
