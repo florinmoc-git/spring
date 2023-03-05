@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.server.authorization.settings.TokenSe
 
 import java.time.Duration;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "clients")
@@ -22,7 +23,13 @@ public class Client {
     @CollectionTable(name = "redirect_uris", joinColumns = @JoinColumn(name = "client"))
     @Column(name = "redirect_uri")
     private Set<String> redirectUris;
-    private String scope;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "client_oidc_scopes",
+            joinColumns = @JoinColumn(name = "client"),
+            inverseJoinColumns = @JoinColumn(name = "oidc_scope")
+    )
+    private Set<OidcScope> scopes;
     private String authMethod;
     private String grantType;
 
@@ -59,12 +66,12 @@ public class Client {
         this.redirectUris = redirectUris;
     }
 
-    public String getScope() {
-        return scope;
+    public Set<OidcScope> getScopes() {
+        return scopes;
     }
 
-    public void setScope(String scope) {
-        this.scope = scope;
+    public void setScopes(Set<OidcScope> scopes) {
+        this.scopes = scopes;
     }
 
     public String getAuthMethod() {
@@ -92,8 +99,11 @@ public class Client {
         client.setRedirectUris(
                 registeredClient.getRedirectUris()
         );
-        client.setScope(
-                registeredClient.getScopes().stream().findAny().get()
+        client.setScopes(
+                registeredClient.getScopes()
+                        .stream()
+                        .map(OidcScope::new)
+                        .collect(Collectors.toSet())
         );
         client.setAuthMethod(
                 registeredClient.getClientAuthenticationMethods().stream().findAny().get().getValue()
@@ -109,7 +119,11 @@ public class Client {
         return RegisteredClient.withId(String.valueOf(client.getId()))
                 .clientId(client.getClientId())
                 .clientSecret(client.getSecret())
-                .scope(client.getScope())
+                .scopes(scopes -> scopes.addAll(
+                        client.getScopes()
+                                .stream()
+                                .map(OidcScope::getOidcScope)
+                                .collect(Collectors.toSet())))
                 .redirectUris(redirectUris -> redirectUris.addAll(client.getRedirectUris()))
                 .clientAuthenticationMethod(new ClientAuthenticationMethod(client.getAuthMethod()))
                 .authorizationGrantType(new AuthorizationGrantType(client.getGrantType()))
