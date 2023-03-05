@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.settings.TokenSettings;
 
 import java.time.Duration;
+import java.util.Set;
 
 @Entity
 @Table(name = "clients")
@@ -17,7 +18,10 @@ public class Client {
 
     private String clientId;
     private String secret;
-    private String redirectUri;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "redirect_uris", joinColumns = @JoinColumn(name = "client"))
+    @Column(name = "redirect_uri")
+    private Set<String> redirectUris;
     private String scope;
     private String authMethod;
     private String grantType;
@@ -46,12 +50,13 @@ public class Client {
         this.secret = secret;
     }
 
-    public String getRedirectUri() {
-        return redirectUri;
+
+    public Set<String> getRedirectUris() {
+        return redirectUris;
     }
 
-    public void setRedirectUri(String redirectUri) {
-        this.redirectUri = redirectUri;
+    public void setRedirectUris(Set<String> redirectUris) {
+        this.redirectUris = redirectUris;
     }
 
     public String getScope() {
@@ -84,8 +89,8 @@ public class Client {
         client.setClientId(registeredClient.getClientId());
         client.setSecret(registeredClient.getClientSecret());
 
-        client.setRedirectUri(    // NOT CLEAN CODE
-                registeredClient.getRedirectUris().stream().findAny().get()
+        client.setRedirectUris(
+                registeredClient.getRedirectUris()
         );
         client.setScope(
                 registeredClient.getScopes().stream().findAny().get()
@@ -105,7 +110,7 @@ public class Client {
                 .clientId(client.getClientId())
                 .clientSecret(client.getSecret())
                 .scope(client.getScope())
-                .redirectUri(client.getRedirectUri())
+                .redirectUris(redirectUris -> redirectUris.addAll(client.getRedirectUris()))
                 .clientAuthenticationMethod(new ClientAuthenticationMethod(client.getAuthMethod()))
                 .authorizationGrantType(new AuthorizationGrantType(client.getGrantType()))
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
