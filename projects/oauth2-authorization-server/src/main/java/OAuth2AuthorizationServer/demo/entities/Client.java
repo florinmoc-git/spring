@@ -37,7 +37,14 @@ public class Client {
             inverseJoinColumns = @JoinColumn(name = "client_authentication_method")
     )
     private Set<ClientAuthenticationMethodEnt> clientAuthenticationMethods;
-    private String grantType;
+//    private String grantType;
+    @ManyToMany
+    @JoinTable(
+            name = "client_grant_types",
+            joinColumns = @JoinColumn(name = "client"),
+            inverseJoinColumns = @JoinColumn(name = "grant_type")
+    )
+    private Set<GrantType> grantTypes;
 
     public int getId() {
         return id;
@@ -88,12 +95,12 @@ public class Client {
         this.clientAuthenticationMethods = clientAuthenticationMethods;
     }
 
-    public String getGrantType() {
-        return grantType;
+    public Set<GrantType> getGrantTypes() {
+        return grantTypes;
     }
 
-    public void setGrantType(String grantType) {
-        this.grantType = grantType;
+    public void setGrantTypes(Set<GrantType> grantTypes) {
+        this.grantTypes = grantTypes;
     }
 
     public static Client from(RegisteredClient registeredClient) {
@@ -118,8 +125,12 @@ public class Client {
                         .map(ClientAuthenticationMethodEnt::new)
                         .collect(Collectors.toSet())
         );
-        client.setGrantType(
-                registeredClient.getAuthorizationGrantTypes().stream().findAny().get().getValue()
+        client.setGrantTypes(
+                registeredClient.getAuthorizationGrantTypes()
+                        .stream()
+                        .map(AuthorizationGrantType::getValue)
+                        .map(GrantType::new)
+                        .collect(Collectors.toSet())
         );
 
         return client;
@@ -142,8 +153,13 @@ public class Client {
                                 .map(ClientAuthenticationMethod::new)
                                 .collect(Collectors.toSet())
                 ))
-                .authorizationGrantType(new AuthorizationGrantType(client.getGrantType()))
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .authorizationGrantTypes(authorizationGrantTypes -> authorizationGrantTypes.addAll(
+                        client.getGrantTypes()
+                                .stream()
+                                .map(GrantType::getGrantType)
+                                .map(AuthorizationGrantType::new)
+                                .collect(Collectors.toSet())
+                ))
                 .tokenSettings(TokenSettings.builder()
 //            .accessTokenFormat(OAuth2TokenFormat.REFERENCE) // opaque
                         .accessTokenTimeToLive(Duration.ofHours(24)).build())
