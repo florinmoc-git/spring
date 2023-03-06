@@ -30,7 +30,13 @@ public class Client {
             inverseJoinColumns = @JoinColumn(name = "oidc_scope")
     )
     private Set<OidcScope> scopes;
-    private String authMethod;
+    @ManyToMany
+    @JoinTable(
+            name = "client__client_authentication_methods",
+            joinColumns = @JoinColumn(name = "client"),
+            inverseJoinColumns = @JoinColumn(name = "client_authentication_method")
+    )
+    private Set<ClientAuthenticationMethodEnt> clientAuthenticationMethods;
     private String grantType;
 
     public int getId() {
@@ -74,12 +80,12 @@ public class Client {
         this.scopes = scopes;
     }
 
-    public String getAuthMethod() {
-        return authMethod;
+    public Set<ClientAuthenticationMethodEnt> getClientAuthenticationMethods() {
+        return clientAuthenticationMethods;
     }
 
-    public void setAuthMethod(String authMethod) {
-        this.authMethod = authMethod;
+    public void setClientAuthenticationMethods(Set<ClientAuthenticationMethodEnt> clientAuthenticationMethods) {
+        this.clientAuthenticationMethods = clientAuthenticationMethods;
     }
 
     public String getGrantType() {
@@ -105,8 +111,12 @@ public class Client {
                         .map(OidcScope::new)
                         .collect(Collectors.toSet())
         );
-        client.setAuthMethod(
-                registeredClient.getClientAuthenticationMethods().stream().findAny().get().getValue()
+        client.setClientAuthenticationMethods(
+                registeredClient.getClientAuthenticationMethods()
+                        .stream()
+                        .map(ClientAuthenticationMethod::getValue)
+                        .map(ClientAuthenticationMethodEnt::new)
+                        .collect(Collectors.toSet())
         );
         client.setGrantType(
                 registeredClient.getAuthorizationGrantTypes().stream().findAny().get().getValue()
@@ -125,9 +135,14 @@ public class Client {
                                 .map(OidcScope::getOidcScope)
                                 .collect(Collectors.toSet())))
                 .redirectUris(redirectUris -> redirectUris.addAll(client.getRedirectUris()))
-                .clientAuthenticationMethod(new ClientAuthenticationMethod(client.getAuthMethod()))
+                .clientAuthenticationMethods(clientAuthenticationMethods -> clientAuthenticationMethods.addAll(
+                        client.getClientAuthenticationMethods()
+                                .stream()
+                                .map(ClientAuthenticationMethodEnt::getClientAuthenticationMethod)
+                                .map(ClientAuthenticationMethod::new)
+                                .collect(Collectors.toSet())
+                ))
                 .authorizationGrantType(new AuthorizationGrantType(client.getGrantType()))
-                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .tokenSettings(TokenSettings.builder()
 //            .accessTokenFormat(OAuth2TokenFormat.REFERENCE) // opaque
