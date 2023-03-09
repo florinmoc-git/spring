@@ -10,7 +10,6 @@ public abstract class Department {
     @Id
     private String name;
     private String description;
-    private Set<Staff> staff;
 
     public String getName() {
         return name;

@@ -21,9 +21,9 @@ public class HospitalService {
     @Transactional
     public Hospital createHospital(Hospital hospital){
 //        This should not be necessary, but Cascade doesn't work. Bug reports exist
-        for (Department hs : hospital.getDepartments()){
-            hospitalDepartmentRepo.save(hs);
-        }
+//        for (Department hs : hospital.getDepartments()){
+//            hospitalDepartmentRepo.save(hs);
+//        }
         return hospitalRepo.save(hospital);
     }
 }

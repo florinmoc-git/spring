@@ -1,9 +1,10 @@
 package healthinformationsystem.his.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import healthinformationsystem.his.entities.embedables.Address;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.PostLoad;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
+
+import java.time.LocalDate;
 
 @MappedSuperclass
 public abstract class Person {
@@ -11,8 +12,11 @@ public abstract class Person {
     private String title;
     private String firstName;
     private String lastName;
-    private String birthDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    private LocalDate birthDate;
     private String phone;
+    @Embedded
+    @AttributeOverride(name = "number", column = @Column(name = "street_no"))
     private Address address;
     @Transient
     private String fullName;
@@ -45,11 +49,11 @@ public abstract class Person {
         this.lastName = lastName;
     }
 
-    public String getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(String birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -67,5 +71,18 @@ public abstract class Person {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "title='" + title + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthDate=" + birthDate +
+                ", phone='" + phone + '\'' +
+                ", address=" + address +
+                ", fullName='" + fullName + '\'' +
+                '}';
     }
 }

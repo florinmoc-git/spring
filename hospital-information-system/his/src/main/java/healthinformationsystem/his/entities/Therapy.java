@@ -1,15 +1,16 @@
 package healthinformationsystem.his.entities;
 
-import healthinformationsystem.his.enums.DoctorSpeciality;
 import jakarta.persistence.*;
 
 @Entity
-public class Doctor extends Staff{
+@Table(name = "therapies")
+public class Therapy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    private DoctorSpeciality speciality;
+    private String description;
+
 
     public Integer getId() {
         return id;
@@ -19,11 +20,11 @@ public class Doctor extends Staff{
         this.id = id;
     }
 
-    public DoctorSpeciality getSpeciality() {
-        return speciality;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSpeciality(DoctorSpeciality speciality) {
-        this.speciality = speciality;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

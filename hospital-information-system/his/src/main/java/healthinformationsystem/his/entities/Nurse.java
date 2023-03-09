@@ -18,4 +18,12 @@ public class Nurse extends Staff{
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public NurseLevel getLevel() {
+        return level;
+    }
+
+    public void setLevel(NurseLevel level) {
+        this.level = level;
+    }
 }

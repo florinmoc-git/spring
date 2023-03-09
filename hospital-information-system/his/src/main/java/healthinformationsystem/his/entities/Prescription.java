@@ -33,4 +33,20 @@ public class Prescription {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    public Set<String> getMedicines() {
+        return medicines;
+    }
+
+    public void setMedicines(Set<String> medicines) {
+        this.medicines = medicines;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 }

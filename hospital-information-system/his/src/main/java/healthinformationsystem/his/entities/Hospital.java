@@ -23,13 +23,13 @@ public class Hospital {
 //            org.hibernate.annotations.CascadeType.PERSIST,
 //            org.hibernate.annotations.CascadeType.REFRESH
 //    })
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "hospital__hospital_departments",
-            joinColumns = @JoinColumn(name = "hospital"),
-            inverseJoinColumns = @JoinColumn(name = "hospital_department")
-    )
-    private Set<Department> departments;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    @JoinTable(
+//            name = "hospital__hospital_departments",
+//            joinColumns = @JoinColumn(name = "hospital"),
+//            inverseJoinColumns = @JoinColumn(name = "hospital_department")
+//    )
+//    private Set<Department> departments;
 
     public Long getId() {
         return id;
@@ -63,11 +63,11 @@ public class Hospital {
         this.phone = phone;
     }
 
-    public Set<Department> getDepartments() {
-        return departments;
-    }
-
-    public void setDepartments(Set<Department> departments) {
-        this.departments = departments;
-    }
+//    public Set<Department> getDepartments() {
+//        return departments;
+//    }
+//
+//    public void setDepartments(Set<Department> departments) {
+//        this.departments = departments;
+//    }
 }
