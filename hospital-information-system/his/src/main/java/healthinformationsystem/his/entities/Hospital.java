@@ -2,9 +2,6 @@ package healthinformationsystem.his.entities;
 
 import healthinformationsystem.his.entities.embedables.Address;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.validator.constraints.NotBlank;
 
 import java.util.Set;
 
@@ -19,7 +16,7 @@ public class Hospital {
     @AttributeOverride(name = "number", column = @Column(name = "street_no"))
     private Address address;
     private String phone;
-//    This doesn't seem to work. Bug reports exist.
+//    This doesn't seem to work: creates duplicate entries. Bug reports exist.
 //    @Cascade({
 //            org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 //            org.hibernate.annotations.CascadeType.MERGE,
@@ -28,11 +25,11 @@ public class Hospital {
 //    })
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "hospital__hospital_specialities",
+            name = "hospital__hospital_departments",
             joinColumns = @JoinColumn(name = "hospital"),
-            inverseJoinColumns = @JoinColumn(name = "hospital_speciality")
+            inverseJoinColumns = @JoinColumn(name = "hospital_department")
     )
-    private Set<HospitalSpeciality> specialities;
+    private Set<Department> departments;
 
     public Long getId() {
         return id;
@@ -66,11 +63,11 @@ public class Hospital {
         this.phone = phone;
     }
 
-    public Set<HospitalSpeciality> getSpecialities() {
-        return specialities;
+    public Set<Department> getDepartments() {
+        return departments;
     }
 
-    public void setSpecialities(Set<HospitalSpeciality> specialities) {
-        this.specialities = specialities;
+    public void setDepartments(Set<Department> departments) {
+        this.departments = departments;
     }
 }

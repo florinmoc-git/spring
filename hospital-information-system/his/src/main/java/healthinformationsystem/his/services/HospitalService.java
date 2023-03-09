@@ -1,9 +1,9 @@
 package healthinformationsystem.his.services;
 
 import healthinformationsystem.his.entities.Hospital;
-import healthinformationsystem.his.entities.HospitalSpeciality;
+import healthinformationsystem.his.entities.Department;
 import healthinformationsystem.his.repos.HospitalRepo;
-import healthinformationsystem.his.repos.HospitalSpecialityRepo;
+import healthinformationsystem.his.repos.HospitalDepartmentRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -11,18 +11,18 @@ import org.springframework.stereotype.Service;
 public class HospitalService {
 
     private final HospitalRepo hospitalRepo;
-    private final HospitalSpecialityRepo hospitalSpecialityRepo;
+    private final HospitalDepartmentRepo hospitalDepartmentRepo;
 
-    public HospitalService(HospitalRepo hospitalRepo, HospitalSpecialityRepo hospitalSpecialityRepo) {
+    public HospitalService(HospitalRepo hospitalRepo, HospitalDepartmentRepo hospitalDepartmentRepo) {
         this.hospitalRepo = hospitalRepo;
-        this.hospitalSpecialityRepo = hospitalSpecialityRepo;
+        this.hospitalDepartmentRepo = hospitalDepartmentRepo;
     }
 
     @Transactional
     public Hospital createHospital(Hospital hospital){
 //        This should not be necessary, but Cascade doesn't work. Bug reports exist
-        for (HospitalSpeciality hs : hospital.getSpecialities()){
-            hospitalSpecialityRepo.save(hs);
+        for (Department hs : hospital.getDepartments()){
+            hospitalDepartmentRepo.save(hs);
         }
         return hospitalRepo.save(hospital);
     }
