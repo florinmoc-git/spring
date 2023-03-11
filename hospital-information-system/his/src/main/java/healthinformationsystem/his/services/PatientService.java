@@ -17,6 +17,7 @@ public class PatientService implements IPatientService {
 
     @Override
     public Patient getPatientById(int patientId) {
+        logger.info("Retrieving patient with id: " + patientId);
         var patientOpt =  patientRepo.findById(patientId);
         return patientOpt.get();
     }

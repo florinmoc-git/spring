@@ -2,6 +2,7 @@ package healthinformationsystem.his.entities;
 
 import healthinformationsystem.his.enums.Sex;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
 
 import java.util.Set;
 
@@ -10,10 +11,15 @@ import java.util.Set;
 public class Ward {
     @Id
     private int id;
-//    private Sex patientSex;
-//    private int numberOfBeds;
-//    private int maxNumberOfBeds;
-//    private Set<Patient> patients;
+    private Sex patientSex;
+    private int numberOfBeds;
+    private int maxNumberOfBeds;
+    private int occupancy;
+//    @Formula("numberOfBeds - occupancy")
+    @Transient
+    private int freeBeds;
+    @OneToMany
+    private Set<Patient> patients;
 //    @ManyToOne
 //    @JoinColumn(name = "department_name")
 //    private ClinicalDepartment department;
@@ -25,44 +31,44 @@ public class Ward {
 //    public void setDepartment(ClinicalDepartment department) {
 //        this.department = department;
 //    }
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public Sex getPatientSex() {
-//        return patientSex;
-//    }
-//
-//    public void setPatientSex(Sex patientSex) {
-//        this.patientSex = patientSex;
-//    }
-//
-//    public int getNumberOfBeds() {
-//        return numberOfBeds;
-//    }
-//
-//    public void setNumberOfBeds(int numberOfBeds) {
-//        this.numberOfBeds = numberOfBeds;
-//    }
-//
-//    public int getMaxNumberOfBeds() {
-//        return maxNumberOfBeds;
-//    }
-//
-//    public void setMaxNumberOfBeds(int maxNumberOfBeds) {
-//        this.maxNumberOfBeds = maxNumberOfBeds;
-//    }
-//
-//    public Set<Patient> getPatients() {
-//        return patients;
-//    }
-//
-//    public void setPatients(Set<Patient> patients) {
-//        this.patients = patients;
-//    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Sex getPatientSex() {
+        return patientSex;
+    }
+
+    public void setPatientSex(Sex patientSex) {
+        this.patientSex = patientSex;
+    }
+
+    public int getNumberOfBeds() {
+        return numberOfBeds;
+    }
+
+    public void setNumberOfBeds(int numberOfBeds) {
+        this.numberOfBeds = numberOfBeds;
+    }
+
+    public int getMaxNumberOfBeds() {
+        return maxNumberOfBeds;
+    }
+
+    public void setMaxNumberOfBeds(int maxNumberOfBeds) {
+        this.maxNumberOfBeds = maxNumberOfBeds;
+    }
+
+    public Set<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(Set<Patient> patients) {
+        this.patients = patients;
+    }
 }

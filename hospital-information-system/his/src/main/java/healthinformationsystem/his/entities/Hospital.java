@@ -16,7 +16,7 @@ public class Hospital {
     @AttributeOverride(name = "number", column = @Column(name = "street_no"))
     private Address address;
     private String phone;
-//    This doesn't seem to work: creates duplicate entries. Bug reports exist.
+
 //    @Cascade({
 //            org.hibernate.annotations.CascadeType.SAVE_UPDATE,
 //            org.hibernate.annotations.CascadeType.MERGE,

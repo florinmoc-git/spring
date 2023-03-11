@@ -1,6 +1,7 @@
 package healthinformationsystem.his.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import healthinformationsystem.his.entities.embedables.Address;
 import jakarta.persistence.*;
 
@@ -19,6 +20,7 @@ public abstract class Person {
     @AttributeOverride(name = "number", column = @Column(name = "street_no"))
     private Address address;
     @Transient
+    @JsonSerialize
     private String fullName;
     @PostLoad
     private void setFullName(){

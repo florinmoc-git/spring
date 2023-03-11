@@ -11,31 +11,35 @@ import java.util.Set;
 @Table(name = "patients")
 public class Patient extends Person {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     @Column(name = "id", nullable = false)
     private Integer id;
     private int weightInKg;
     private double heightInMetres;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate firstAdmissionDate;
-//    @OneToMany
-//    private Set<Illness> illnesses;
-//    private Set<String> allergies;
-//    private Set<MedicalExamination> medicalExaminations;
-//    @ManyToOne
-//    @JoinColumn(name = "ward_id")
-//    private Ward ward;
 
+    @OneToMany(targetEntity = Illness.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    private Set<Illness> illnesses;
+
+    @ElementCollection
+    @CollectionTable(name = "patient_allergies", joinColumns = @JoinColumn(name = "patient"))
+    @Column(name = "allergy")
+    private Set<String> allergies;
+//    private Set<MedicalExamination> medicalExaminations;
+
+    private int wardId;
     @Transient
     private long age;
 
-//    public Ward getWard() {
-//        return ward;
-//    }
-//
-//    public void setWard(Ward ward) {
-//        this.ward = ward;
-//    }
+    public int getWardId() {
+        return wardId;
+    }
+
+    public void setWardId(int wardId) {
+        this.wardId = wardId;
+    }
 
     @PostLoad
     private void calculateAge(){
@@ -74,13 +78,13 @@ public class Patient extends Person {
         this.firstAdmissionDate = firstAdmissionDate;
     }
 
-//    public Set<Illness> getIllnesses() {
-//        return illnesses;
-//    }
-//
-//    public void setIllnesses(Set<Illness> illnesses) {
-//        this.illnesses = illnesses;
-//    }
+    public Set<Illness> getIllnesses() {
+        return illnesses;
+    }
+
+    public void setIllnesses(Set<Illness> illnesses) {
+        this.illnesses = illnesses;
+    }
 
     public long getAge() {
         return age;
@@ -90,13 +94,13 @@ public class Patient extends Person {
         this.age = age;
     }
 
-//    public Set<String> getAllergies() {
-//        return allergies;
-//    }
-//
-//    public void setAllergies(Set<String> allergies) {
-//        this.allergies = allergies;
-//    }
+    public Set<String> getAllergies() {
+        return allergies;
+    }
+
+    public void setAllergies(Set<String> allergies) {
+        this.allergies = allergies;
+    }
 //
 //    public Set<MedicalExamination> getMedicalExaminations() {
 //        return medicalExaminations;
