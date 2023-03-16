@@ -5,13 +5,14 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "patients")
 public class Patient extends Person {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
     private int weightInKg;
@@ -21,7 +22,7 @@ public class Patient extends Person {
 
     @OneToMany(targetEntity = Illness.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
-    private Set<Illness> illnesses;
+    private Set<Illness> illnesses = new HashSet<>();
 
     @ElementCollection
     @CollectionTable(name = "patient_allergies", joinColumns = @JoinColumn(name = "patient"))
@@ -32,6 +33,10 @@ public class Patient extends Person {
     private int wardId;
     @Transient
     private long age;
+
+    public boolean addIllness(String illness){
+       return illnesses.add(new Illness(illness, LocalDate.now()));
+    }
 
     public int getWardId() {
         return wardId;
@@ -101,7 +106,7 @@ public class Patient extends Person {
     public void setAllergies(Set<String> allergies) {
         this.allergies = allergies;
     }
-//
+
 //    public Set<MedicalExamination> getMedicalExaminations() {
 //        return medicalExaminations;
 //    }
@@ -109,7 +114,7 @@ public class Patient extends Person {
 //    public void setMedicalExaminations(Set<MedicalExamination> medicalExaminations) {
 //        this.medicalExaminations = medicalExaminations;
 //    }
-//
+
 
 
     @Override
@@ -119,9 +124,42 @@ public class Patient extends Person {
                 ", weightInKg=" + weightInKg +
                 ", heightInMetres=" + heightInMetres +
                 ", firstAdmissionDate=" + firstAdmissionDate +
-//                ", illnesses=" + illnesses +
+                ", illnesses=" + illnesses +
 //                ", ward=" + ward +
                 ", age=" + age +
                 "} " + super.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Patient patient = (Patient) o;
+
+        if (weightInKg != patient.weightInKg) return false;
+        if (Double.compare(patient.heightInMetres, heightInMetres) != 0) return false;
+        if (wardId != patient.wardId) return false;
+        if (age != patient.age) return false;
+        if (!id.equals(patient.id)) return false;
+        if (!firstAdmissionDate.equals(patient.firstAdmissionDate)) return false;
+        if (!illnesses.equals(patient.illnesses)) return false;
+        return allergies.equals(patient.allergies);
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = id.hashCode();
+        result = 31 * result + weightInKg;
+        temp = Double.doubleToLongBits(heightInMetres);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + firstAdmissionDate.hashCode();
+        result = 31 * result + illnesses.hashCode();
+        result = 31 * result + allergies.hashCode();
+        result = 31 * result + wardId;
+        result = 31 * result + (int) (age ^ (age >>> 32));
+        return result;
     }
 }

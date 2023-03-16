@@ -1,10 +1,13 @@
 package healthinformationsystem.his.services;
 
+import healthinformationsystem.his.entities.Illness;
 import healthinformationsystem.his.entities.Patient;
 import healthinformationsystem.his.repos.PatientRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class PatientService implements IPatientService {
@@ -23,6 +26,14 @@ public class PatientService implements IPatientService {
     }
 
     @Override
+    public Patient addIllnessToPatient(int patientId, String diagnosis){
+        logger.info("Adding illness '"+ diagnosis +"' to patient with id: " + patientId);
+        var patient = getPatientById(patientId);
+        patient.addIllness(diagnosis);
+        return patientRepo.save(patient);
+    }
+
+    @Override
     public Patient admitPatient(Patient patient) {
         logger.info("Admitting patient: " + patient);
         return patientRepo.save(patient);
@@ -35,6 +46,7 @@ public class PatientService implements IPatientService {
 
     @Override
     public Patient updatePatient(Patient patient) {
-        return null;
+        logger.info("Updating record for patient: " + patient);
+        return patientRepo.save(patient);
     }
 }

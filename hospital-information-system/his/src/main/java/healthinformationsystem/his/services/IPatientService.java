@@ -11,6 +11,8 @@ public interface IPatientService {
      */
     Patient getPatientById(int patientId);
 
+    Patient addIllnessToPatient(int patientId, String diagnosis);
+
     /**
      * Admits a patient to hospital care. Creates patient if not exits.
      * @param patient
