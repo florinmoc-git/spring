@@ -2,6 +2,8 @@ package healthinformationsystem.his.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -15,8 +17,11 @@ public class Patient extends Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
-    private int weightInKg;
-    private double heightInMetres;
+    @Min(value = 0, message = "cannot be less than 0")
+    private int weight;
+    @Min(value = 0, message = "cannot be less than 0")
+    @Max(value = 3, message = "cannot be more than 3")
+    private double height;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate firstAdmissionDate;
 
@@ -29,10 +34,14 @@ public class Patient extends Person {
     @Column(name = "allergy")
     private Set<String> allergies;
 //    private Set<MedicalExamination> medicalExaminations;
-
+    @Min(100)
     private int wardId;
     @Transient
     private long age;
+    @PostLoad
+    private void calculateAge(){
+        this.age = ChronoUnit.YEARS.between(super.getBirthDate(), LocalDate.now());
+    }
 
     public boolean addIllness(String illness){
        return illnesses.add(new Illness(illness, LocalDate.now()));
@@ -46,11 +55,6 @@ public class Patient extends Person {
         this.wardId = wardId;
     }
 
-    @PostLoad
-    private void calculateAge(){
-        this.age = ChronoUnit.YEARS.between(super.getBirthDate(), LocalDate.now());
-    }
-
     public Integer getId() {
         return id;
     }
@@ -59,20 +63,20 @@ public class Patient extends Person {
         this.id = id;
     }
 
-    public int getWeightInKg() {
-        return weightInKg;
+    public int getWeight() {
+        return weight;
     }
 
-    public void setWeightInKg(int weightInKg) {
-        this.weightInKg = weightInKg;
+    public void setWeight(int weight) {
+        this.weight = weight;
     }
 
-    public double getHeightInMetres() {
-        return heightInMetres;
+    public double getHeight() {
+        return height;
     }
 
-    public void setHeightInMetres(double heightInMetres) {
-        this.heightInMetres = heightInMetres;
+    public void setHeight(double height) {
+        this.height = height;
     }
 
     public LocalDate getFirstAdmissionDate() {
@@ -121,8 +125,8 @@ public class Patient extends Person {
     public String toString() {
         return "Patient{" +
                 "id=" + id +
-                ", weightInKg=" + weightInKg +
-                ", heightInMetres=" + heightInMetres +
+                ", weightInKg=" + weight +
+                ", heightInMetres=" + height +
                 ", firstAdmissionDate=" + firstAdmissionDate +
                 ", illnesses=" + illnesses +
 //                ", ward=" + ward +
@@ -137,8 +141,8 @@ public class Patient extends Person {
 
         Patient patient = (Patient) o;
 
-        if (weightInKg != patient.weightInKg) return false;
-        if (Double.compare(patient.heightInMetres, heightInMetres) != 0) return false;
+        if (weight != patient.weight) return false;
+        if (Double.compare(patient.height, height) != 0) return false;
         if (wardId != patient.wardId) return false;
         if (age != patient.age) return false;
         if (!id.equals(patient.id)) return false;
@@ -152,8 +156,8 @@ public class Patient extends Person {
         int result;
         long temp;
         result = id.hashCode();
-        result = 31 * result + weightInKg;
-        temp = Double.doubleToLongBits(heightInMetres);
+        result = 31 * result + weight;
+        temp = Double.doubleToLongBits(height);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + firstAdmissionDate.hashCode();
         result = 31 * result + illnesses.hashCode();

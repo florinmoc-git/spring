@@ -2,15 +2,16 @@ package healthinformationsystem.his.controllers;
 
 import healthinformationsystem.his.entities.Patient;
 import healthinformationsystem.his.services.IPatientService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/patients")
-public class PatientCtrl {
+public class PatientController {
 
     private final IPatientService patientService;
 
-    public PatientCtrl(IPatientService patientService) {
+    public PatientController(IPatientService patientService) {
         this.patientService = patientService;
     }
 
@@ -20,7 +21,7 @@ public class PatientCtrl {
     }
 
     @PostMapping("/admit")
-    public Patient admit(@RequestBody Patient patient){
+    public Patient admit(@RequestBody @Valid Patient patient){
         return patientService.admitPatient(patient);
     }
 }

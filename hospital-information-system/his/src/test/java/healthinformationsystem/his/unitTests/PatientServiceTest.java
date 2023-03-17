@@ -35,7 +35,7 @@ public class PatientServiceTest {
     @Test
     public void getPatientByIdTest(){
         var patient = new Patient();
-        when(patientRepo.findById(anyInt())).thenReturn(Optional.of(patient));
+        when(patientRepo.findById(1)).thenReturn(Optional.of(patient));
         assertEquals(patient, patientService.getPatientById(1));
         verify(patientRepo).findById(1);
     }
@@ -43,7 +43,7 @@ public class PatientServiceTest {
     @Test
     public void addIllnessToPatientTest(){
         var patient = new Patient();
-        when(patientRepo.findById(anyInt())).thenReturn(Optional.of(patient));
+        when(patientRepo.findById(1)).thenReturn(Optional.of(patient));
         patientService.addIllnessToPatient(1, "Headache");
         verify(patientRepo).save(patientArgumentCaptor.capture());
         Patient p = patientArgumentCaptor.getValue();

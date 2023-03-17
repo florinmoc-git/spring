@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import healthinformationsystem.his.entities.embedables.Address;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
@@ -11,11 +15,17 @@ import java.time.LocalDate;
 public abstract class Person {
 
     private String title;
+//    @NotNull(message = "cannot be empty")
+    @NotBlank(message = "cannot be empty")
     private String firstName;
+    @NotBlank(message = "cannot be empty")
     private String lastName;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate birthDate;
+    @Pattern(regexp = "^\\d{11}$", message = "not a valid phone number")
     private String phone;
+    @Email(message = "not a valid email address")
+    private String email;
     @Embedded
     @AttributeOverride(name = "number", column = @Column(name = "street_no"))
     private Address address;
@@ -73,6 +83,22 @@ public abstract class Person {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     @Override

@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/hospitals")
-public class HospitalCtrl {
+public class HospitalController {
 
     private final HospitalService hospitalService;
 
-    public HospitalCtrl(HospitalService hospitalService) {
+    public HospitalController(HospitalService hospitalService) {
         this.hospitalService = hospitalService;
     }
 
