@@ -13,6 +13,16 @@ public class Address {
     private String postcode;
     private String country;
 
+    public Address(){}
+
+    public Address(int number, String street, String city, String county, String postcode, String country) {
+        this.number = number;
+        this.street = street;
+        this.city = city;
+        this.county = county;
+        this.postcode = postcode;
+        this.country = country;
+    }
 
     public int getNumber() {
         return number;

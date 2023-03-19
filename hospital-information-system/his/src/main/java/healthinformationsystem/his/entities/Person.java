@@ -6,16 +6,15 @@ import healthinformationsystem.his.entities.embedables.Address;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 public abstract class Person {
 
     private String title;
-//    @NotNull(message = "cannot be empty")
     @NotBlank(message = "cannot be empty")
     private String firstName;
     @NotBlank(message = "cannot be empty")
@@ -32,6 +31,18 @@ public abstract class Person {
     @Transient
     @JsonSerialize
     private String fullName;
+    @Column(nullable = false)
+    private LocalDateTime firstCreated;
+    private LocalDateTime lastModified;
+    @PrePersist
+    public void prePersist(){
+        this.firstCreated = LocalDateTime.now();
+        this.lastModified = LocalDateTime.now();
+    }
+    @PreUpdate
+    public void preUpdate(){
+        this.lastModified = LocalDateTime.now();
+    }
     @PostLoad
     private void setFullName(){
         this.fullName = title + " " + firstName + " " + lastName;
@@ -97,20 +108,20 @@ public abstract class Person {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public LocalDateTime getFirstCreated() {
+        return firstCreated;
     }
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "title='" + title + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", birthDate=" + birthDate +
-                ", phone='" + phone + '\'' +
-                ", address=" + address +
-                ", fullName='" + fullName + '\'' +
-                '}';
+    private void setFirstCreated(LocalDateTime firstCreated) {
+        this.firstCreated = firstCreated;
     }
+
+    public LocalDateTime getLastModified() {
+        return lastModified;
+    }
+
+    private void setLastModified(LocalDateTime lastModified) {
+        this.lastModified = lastModified;
+    }
+
 }
