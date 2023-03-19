@@ -2,7 +2,7 @@ package healthinformationsystem.his.controllers.error_handling;
 
 import java.util.Objects;
 
-class ApiValidationError extends ApiSubError {
+class ApiValidationError {
     private String object;
     private String field;
     private Object rejectedValue;
