@@ -16,6 +16,9 @@ public class Patient extends Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
+    @Transient
+//    @JsonSerialize
+    private String fullName;
     @Min(value = 0, message = "cannot be less than 0")
     private int weight;
     @Min(value = 0, message = "cannot be less than 0")
@@ -37,11 +40,16 @@ public class Patient extends Person {
     private Set<String> allergies;
 //    private Set<MedicalExamination> medicalExaminations;
 
-    @PostLoad
-    private void calculateAge(){
+//    @PostLoad TODO - should be @PostLoad but for some reason it's not working.
+    @PrePersist
+    private void populateCalculatedFields(){
         this.age = ChronoUnit.YEARS.between(super.getBirthDate(), LocalDate.now());
+        this.fullName = super.getTitle() + " " + super.getFirstName() + " " + super.getLastName();
     }
 
+    public String getFullName() {
+        return fullName;
+    }
     public boolean addIllness(String illness){
        return illnesses.add(new Illness(illness, LocalDate.now()));
     }

@@ -28,11 +28,11 @@ public abstract class Person {
     @Embedded
     @AttributeOverride(name = "number", column = @Column(name = "street_no"))
     private Address address;
-    @Transient
-    @JsonSerialize
-    private String fullName;
+
     @Column(nullable = false)
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy hh:mm:ss")
     private LocalDateTime firstCreated;
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy hh:mm:ss")
     private LocalDateTime lastModified;
     @PrePersist
     public void prePersist(){
@@ -43,10 +43,7 @@ public abstract class Person {
     public void preUpdate(){
         this.lastModified = LocalDateTime.now();
     }
-    @PostLoad
-    private void setFullName(){
-        this.fullName = title + " " + firstName + " " + lastName;
-    }
+
 
     public String getTitle() {
         return title;
@@ -104,9 +101,7 @@ public abstract class Person {
         this.email = email;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
+
 
     public LocalDateTime getFirstCreated() {
         return firstCreated;
