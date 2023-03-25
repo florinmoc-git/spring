@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -14,20 +15,22 @@ public class MedicalExamination {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private int id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-    private LocalDate date;
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime firstCreated;
+    private LocalDateTime lastModified;
     @NotNull
     @Column(nullable = false)
     private String diagnosis;
     private String examinationNotes;
-    // NOTE A patient must first exist in order for a medical examination to be associated with that patient
-    @NotNull
-    @Column(nullable = false)
-    private int patientId;
-//    @ManyToOne
-//    private Set<Prescription> prescriptions;
-//    private Set<Therapy> therapies;
-//    private Set<Surgery> surgeries;
+    @PrePersist
+    public void prePersist() {
+        this.firstCreated = LocalDateTime.now();
+        this.lastModified = LocalDateTime.now();
+    }
+    @PreUpdate
+    public void preUpdate() {
+        this.lastModified = LocalDateTime.now();
+    }
 
 //    @ManyToOne
 //    @JoinColumn(name = "performed_by_id")
@@ -49,14 +52,6 @@ public class MedicalExamination {
         this.id = id;
     }
 
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
     public String getDiagnosis() {
         return diagnosis;
     }
@@ -72,36 +67,22 @@ public class MedicalExamination {
     public void setExaminationNotes(String examinationNotes) {
         this.examinationNotes = examinationNotes;
     }
-//
-//    public Set<Therapy> getTherapies() {
-//        return therapies;
-//    }
-//
-//    public void setTherapies(Set<Therapy> therapies) {
-//        this.therapies = therapies;
-//    }
-//
-//    public Set<Surgery> getSurgeries() {
-//        return surgeries;
-//    }
-//
-//    public void setSurgeries(Set<Surgery> surgeries) {
-//        this.surgeries = surgeries;
-//    }
-//
-//    public Set<Prescription> getPrescriptions() {
-//        return prescriptions;
-//    }
-//
-//    public void setPrescriptions(Set<Prescription> prescriptions) {
-//        this.prescriptions = prescriptions;
-//    }
 
-    public int getPatientId() {
-        return patientId;
+    public LocalDateTime getFirstCreated() {
+        return firstCreated;
     }
 
-    public void setPatientId(int patientId) {
-        this.patientId = patientId;
+    public void setFirstCreated(LocalDateTime firstCreated) {
+        this.firstCreated = firstCreated;
     }
+
+    public LocalDateTime getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(LocalDateTime lastModified) {
+        this.lastModified = lastModified;
+    }
+
 }
+

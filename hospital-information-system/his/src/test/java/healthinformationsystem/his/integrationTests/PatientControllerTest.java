@@ -70,7 +70,7 @@ public class PatientControllerTest {
         mockMvc.perform(get("/patients/get/{id}", 99))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.detail").value("No resource found at path: /patients/get/99"));
     }
 

@@ -1,12 +1,14 @@
 package healthinformationsystem.his.entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import healthinformationsystem.his.entities.embedables.Address;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.data.annotation.ReadOnlyProperty;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,8 +31,9 @@ public abstract class Person {
     @AttributeOverride(name = "number", column = @Column(name = "street_no"))
     private Address address;
 
-    @Column(nullable = false)
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy hh:mm:ss")
+    @Column(nullable = false, updatable = false)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @ReadOnlyProperty
     private LocalDateTime firstCreated;
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy hh:mm:ss")
     private LocalDateTime lastModified;
@@ -101,22 +104,12 @@ public abstract class Person {
         this.email = email;
     }
 
-
-
     public LocalDateTime getFirstCreated() {
         return firstCreated;
     }
 
-    private void setFirstCreated(LocalDateTime firstCreated) {
-        this.firstCreated = firstCreated;
-    }
-
     public LocalDateTime getLastModified() {
         return lastModified;
-    }
-
-    private void setLastModified(LocalDateTime lastModified) {
-        this.lastModified = lastModified;
     }
 
 }

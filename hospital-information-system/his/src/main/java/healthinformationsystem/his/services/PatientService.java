@@ -1,13 +1,13 @@
 package healthinformationsystem.his.services;
 
-import healthinformationsystem.his.entities.Illness;
 import healthinformationsystem.his.entities.Patient;
 import healthinformationsystem.his.repos.PatientRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
-import java.time.LocalDate;
+import java.util.Map;
 
 @Service
 public class PatientService implements IPatientService {
@@ -49,4 +49,24 @@ public class PatientService implements IPatientService {
         logger.info("Updating record for patient: " + patient);
         return patientRepo.save(patient);
     }
+
+    // Interesting approach, but it only seems to work with primitives and strings. If you have an object (say Date or
+    // Address), it falls over as it tries to set a String where a Date is expected. This could work if you use a
+    // mapper or something - or if you do the conversion manually (not elegant).
+    @Override
+    public Patient updatePatientPatch(int patientId, Map<String, Object> fields) {
+        var patient = getPatientById(patientId);
+        fields.forEach((key, value) -> {
+            var field = ReflectionUtils.findField(Patient.class, key);
+            field.setAccessible(true);
+//            if (key.equals("birthDate")){
+//                var val = LocalDate.parse((CharSequence) value,  DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+//                ReflectionUtils.setField(field, patient, val);
+//            } else {
+                ReflectionUtils.setField(field, patient, value);
+//            }
+        });
+        return patientRepo.save(patient);
+    }
+
 }

@@ -20,6 +20,10 @@ public class Illness {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     private LocalDate dateDiagnosed;
 
+//    private Set<Prescription> prescriptions;
+//    private Set<Therapy> therapies;
+//    private Set<Surgery> surgeries;
+
     public Illness() {
     }
 

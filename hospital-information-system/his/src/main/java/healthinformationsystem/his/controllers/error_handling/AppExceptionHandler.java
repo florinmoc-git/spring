@@ -1,6 +1,7 @@
 package healthinformationsystem.his.controllers.error_handling;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.*;
@@ -32,7 +33,7 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setDetail("Invalid arguments in JSON request");
         problemDetail.setProperty("entity", exception.getObjectName());
         problemDetail.setProperty("subErrors", apiValidationErrors);
-        return new ResponseEntity<>(problemDetail, status);
+        return ResponseEntity.of(problemDetail).build();
     }
 
     @Override
@@ -41,14 +42,29 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         problemDetail.setDetail("Malformed JSON request");
         problemDetail.setProperty("message", exception.getMessage());
-        return new ResponseEntity<>(problemDetail, status);
+        return ResponseEntity.of(problemDetail).build();
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Object> handleNoSuchElementException(NoSuchElementException exception, HttpServletRequest request) {
-        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
         problemDetail.setDetail("No resource found at path: " + request.getRequestURI());
         problemDetail.setProperty("message", exception.getMessage());
-        return new ResponseEntity<>(problemDetail, HttpStatus.NOT_FOUND);
+        return ResponseEntity.of(problemDetail).build();
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException exception, HttpServletRequest request) {
+        List<ApiValidationError> apiValidationErrors = exception.getConstraintViolations()
+                .stream()
+                .map(violation ->
+                        new ApiValidationError(violation.getRootBean().getClass().getSimpleName(), violation.getPropertyPath().toString(),
+                                violation.getInvalidValue(), violation.getMessageTemplate()))
+                .collect(Collectors.toList());
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setDetail("Constraint violation updating resource at path: " + request.getRequestURI());
+        problemDetail.setProperty("message", exception.getMessage());
+        problemDetail.setProperty("subErrors", apiValidationErrors);
+        return ResponseEntity.of(problemDetail).build();
     }
 }

@@ -2,6 +2,8 @@ package healthinformationsystem.his.services;
 
 import healthinformationsystem.his.entities.Patient;
 
+import java.util.Map;
+
 public interface IPatientService {
 
     /**
@@ -33,4 +35,6 @@ public interface IPatientService {
      * @return Patient
      */
     Patient updatePatient(Patient patient);
+
+    Patient updatePatientPatch(int patientId, Map<String, Object> fields);
 }

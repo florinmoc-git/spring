@@ -24,7 +24,6 @@ public class Patient extends Person {
     @Min(value = 0, message = "cannot be less than 0")
     @Max(value = 3, message = "cannot be more than 3")
     private double height;
-//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
     @Min(100)
     private int wardId;
     @Transient
@@ -34,11 +33,14 @@ public class Patient extends Person {
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     private Set<Illness> illnesses = new HashSet<>();
 
+    @OneToMany(targetEntity = MedicalExamination.class, cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    private Set<MedicalExamination> medicalExaminations;
+
     @ElementCollection
     @CollectionTable(name = "patient_allergies", joinColumns = @JoinColumn(name = "patient"))
     @Column(name = "allergy")
     private Set<String> allergies;
-//    private Set<MedicalExamination> medicalExaminations;
 
 //    @PostLoad TODO - should be @PostLoad but for some reason it's not working.
     @PrePersist
@@ -106,14 +108,12 @@ public class Patient extends Person {
         this.allergies = allergies;
     }
 
+    public Set<MedicalExamination> getMedicalExaminations() {
+        return medicalExaminations;
+    }
 
-
-    //    public Set<MedicalExamination> getMedicalExaminations() {
-//        return medicalExaminations;
-//    }
-//
-//    public void setMedicalExaminations(Set<MedicalExamination> medicalExaminations) {
-//        this.medicalExaminations = medicalExaminations;
-//    }
+    public void setMedicalExaminations(Set<MedicalExamination> medicalExaminations) {
+        this.medicalExaminations = medicalExaminations;
+    }
 
 }

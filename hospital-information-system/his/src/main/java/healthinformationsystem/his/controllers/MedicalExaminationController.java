@@ -1,10 +1,7 @@
 package healthinformationsystem.his.controllers;
 
-import healthinformationsystem.his.entities.MedicalExamination;
 import healthinformationsystem.his.services.IMedicalExaminationService;
 import healthinformationsystem.his.services.IPatientService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,9 +17,9 @@ public class MedicalExaminationController {
         this.medicalExaminationService = medicalExaminationService;
     }
 
-    @PostMapping("/add")
-    public MedicalExamination addMedicalExamination(@RequestBody MedicalExamination medicalExamination){
-        patientService.addIllnessToPatient(medicalExamination.getPatientId(), medicalExamination.getDiagnosis());
-        return medicalExaminationService.addMedicalExamination(medicalExamination);
-    }
+//    @PostMapping("/add")
+//    public MedicalExamination addMedicalExamination(@RequestBody MedicalExamination medicalExamination){
+//        patientService.addIllnessToPatient(medicalExamination.getPatientId(), medicalExamination.getDiagnosis());
+//        return medicalExaminationService.addMedicalExamination(medicalExamination);
+//    }
 }
