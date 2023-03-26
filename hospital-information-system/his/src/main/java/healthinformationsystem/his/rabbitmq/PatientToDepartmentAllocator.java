@@ -1,6 +1,7 @@
 package healthinformationsystem.his.rabbitmq;
 
 import healthinformationsystem.his.dtos.PatientToDepartmentAllocationRequest;
+import healthinformationsystem.his.entities.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -24,10 +25,11 @@ public class PatientToDepartmentAllocator {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void sendAllocationMessage(PatientToDepartmentAllocationRequest allocationRequest){
-        logger.info(String.format("Patient sent -> %s", allocationRequest.getPatient()));
+    public void sendAllocationMessage(Patient patient, String department){
+        var allocationRequest = new  PatientToDepartmentAllocationRequest(patient, department);
+        logger.info(String.format("Patient sent -> %s", allocationRequest.patient()));
         rabbitTemplate.convertAndSend(
-                departmentTopicExchange, routingKeys.get(allocationRequest.getRoutingKey()),
-                allocationRequest.getPatient());
+                departmentTopicExchange, routingKeys.get(allocationRequest.routingKey()),
+                allocationRequest.patient());
     }
 }

@@ -4,25 +4,21 @@ import healthinformationsystem.his.entities.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TriageRequestConsumer {
+public class AllocationRequestConsumer {
+    private static final Logger logger = LoggerFactory.getLogger(AllocationRequestConsumer.class);
 
-    private static final Logger logger = LoggerFactory.getLogger(TriageRequestConsumer.class);
     private final RabbitTemplate rabbitTemplate;
-    @Value("${rabbitmq.triage.request.queue}")
-    private String triageRequestQueue;
 
-    public TriageRequestConsumer(RabbitTemplate rabbitTemplate) {
+    public AllocationRequestConsumer(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    //    @RabbitListener(queues = {"${rabbitmq.triage.request.queue}"})
-    public Patient consumeTriageRequest(){
+    public Patient consumeAllocationRequest(String departmentQueue){
         Patient patient = null;
-        Object message = rabbitTemplate.receiveAndConvert(triageRequestQueue);
+        Object message = rabbitTemplate.receiveAndConvert(departmentQueue);
         if (message != null) {
             patient = (Patient) message;
             logger.info(String.format("Patient received -> %s", patient));

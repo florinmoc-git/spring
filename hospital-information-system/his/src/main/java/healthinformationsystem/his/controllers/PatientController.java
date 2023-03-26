@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
-import healthinformationsystem.his.dtos.PatientToDepartmentAllocationRequest;
 import healthinformationsystem.his.entities.Patient;
 import healthinformationsystem.his.rabbitmq.PatientToDepartmentAllocator;
 import healthinformationsystem.his.services.IPatientService;
@@ -46,19 +45,19 @@ public class PatientController {
             throw exception;
         }
         var admittedPatient =  patientService.admitPatient(patient);
-        sendToAllocator(admittedPatient, department);
+        patientToDepartmentAllocator.sendAllocationMessage(admittedPatient, department);
         return admittedPatient;
     }
 
     private void sendToAllocator(Patient patient, String department){
-        patientToDepartmentAllocator.sendAllocationMessage(new PatientToDepartmentAllocationRequest(patient, department));
     }
 
     private MethodArgumentNotValidException getMethodArgumentNotValidException(Patient patient) {
         var result = new BeanPropertyBindingResult(patient, "patient");
         var exception = new MethodArgumentNotValidException((MethodParameter) null, result);
-        var fieldError = new FieldError("patient", "id", patient.getId(), true, null, null,
-                "You cannot set value for patient id in admit endpoint. Did you mean to update patient?");
+        var fieldError =
+                new FieldError("patient", "id", patient.getId(), true, null, null,
+                "Patient cannot have 'id' when first created. Did you mean to update patient?");
         exception.getBindingResult().addError(fieldError);
         return exception;
     }
