@@ -1,5 +1,5 @@
 # Proofs of concept
-## Spring
+## Patient Management System
 This PoC demonstrates the use of the following technologies:
 * Spring & Spring Boot
 * JPA (Hibernate)
