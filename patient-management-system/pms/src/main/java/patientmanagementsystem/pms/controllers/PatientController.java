@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import jakarta.validation.Valid;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
@@ -26,15 +28,17 @@ public class PatientController {
 
     private final IPatientService patientService;
     private final PatientToDepartmentAllocator patientToDepartmentAllocator;
+    private final ObservationRegistry observationRegistry;
 
-    public PatientController(IPatientService patientService, PatientToDepartmentAllocator patientToDepartmentAllocator) {
+    public PatientController(IPatientService patientService, PatientToDepartmentAllocator patientToDepartmentAllocator, ObservationRegistry observationRegistry) {
         this.patientService = patientService;
         this.patientToDepartmentAllocator = patientToDepartmentAllocator;
+        this.observationRegistry = observationRegistry;
     }
 
     @GetMapping("/get/{id}")
     public Patient getPatient(@PathVariable int id) {
-        return patientService.getPatientById(id);
+        return Observation.createNotStarted("get-patient", observationRegistry).observe(() -> patientService.getPatientById(id));
     }
 
     @PostMapping("/admit/{department}")
@@ -44,12 +48,14 @@ public class PatientController {
             var exception = getMethodArgumentNotValidException(patient);
             throw exception;
         }
-        var admittedPatient =  patientService.admitPatient(patient);
+        var admittedPatient = patientService.admitPatient(patient);
 //        patientToDepartmentAllocator.sendAllocationMessage(admittedPatient, department);
-        return admittedPatient;
+        return Observation
+                .createNotStarted("admit-patient", observationRegistry)
+                .observe(() -> admittedPatient);
     }
 
-    private void sendToAllocator(Patient patient, String department){
+    private void sendToAllocator(Patient patient, String department) {
     }
 
     private MethodArgumentNotValidException getMethodArgumentNotValidException(Patient patient) {
@@ -57,14 +63,16 @@ public class PatientController {
         var exception = new MethodArgumentNotValidException((MethodParameter) null, result);
         var fieldError =
                 new FieldError("patient", "id", patient.getId(), true, null, null,
-                "Patient cannot have 'id' when first created. Did you mean to update patient?");
+                        "Patient cannot have 'id' when first created. Did you mean to update patient?");
         exception.getBindingResult().addError(fieldError);
         return exception;
     }
 
     @PutMapping("/update-put")
     public Patient updatePatientPut(@RequestBody @Valid Patient patient) {
-        return patientService.updatePatient(patient);
+        return Observation
+                .createNotStarted("update-put-patient", observationRegistry)
+                .observe(() -> patientService.updatePatient(patient));
     }
 
     @PatchMapping("/update-reflection/{id}")

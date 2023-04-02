@@ -6,6 +6,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import patientmanagementsystem.pms.entities.Patient;
 
+/**
+ * Retrieves a patient from a department queue for further processing
+ */
 @Service
 public class AllocationRequestConsumer {
     private static final Logger logger = LoggerFactory.getLogger(AllocationRequestConsumer.class);

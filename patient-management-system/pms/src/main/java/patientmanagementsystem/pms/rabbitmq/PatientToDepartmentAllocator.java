@@ -10,6 +10,9 @@ import patientmanagementsystem.pms.entities.Patient;
 
 import java.util.Map;
 
+/**
+ * Allocates or re-allocates a patient to one of hospital's departments
+ */
 @Service
 public class PatientToDepartmentAllocator {
 

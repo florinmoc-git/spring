@@ -1,6 +1,5 @@
 package patientmanagementsystem.pms.services;
 
-import patientmanagementsystem.pms.entities.MedicalExamination;
 import patientmanagementsystem.pms.entities.Patient;
 
 import java.util.Map;
@@ -39,5 +38,4 @@ public interface IPatientService {
 
     Patient updatePatientPatch(int patientId, Map<String, Object> fields);
 
-    Patient addMedicalExamination(Patient patient, MedicalExamination medicalExamination);
 }

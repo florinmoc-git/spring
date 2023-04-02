@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
-import patientmanagementsystem.pms.entities.MedicalExamination;
 import patientmanagementsystem.pms.entities.Patient;
 import patientmanagementsystem.pms.repos.PatientRepo;
 
@@ -67,12 +66,6 @@ public class PatientService implements IPatientService {
                 ReflectionUtils.setField(field, patient, value);
 //            }
         });
-        return patientRepo.save(patient);
-    }
-
-    @Override
-    public Patient addMedicalExamination(Patient patient, MedicalExamination medicalExamination) {
-        patient.addMedicalExamination(medicalExamination);
         return patientRepo.save(patient);
     }
 

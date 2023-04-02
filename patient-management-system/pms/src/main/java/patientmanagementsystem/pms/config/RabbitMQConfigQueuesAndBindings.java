@@ -18,6 +18,9 @@ public class RabbitMQConfigQueuesAndBindings {
     String departmentTopicExchange;
     @Value("#{${rabbitmq.department.routing.keys}}")
     private Map<String, String> routingKeys;
+    // Having the actual departments in the props file makes it easier to add new departments. But not sure in real life
+    // how often a hospital would add new departments.
+    // The principle though may be useful in other circumstances.
     @Value("#{${rabbitmq.department.request.queues}}")
     private Map<String, String> requestQueues;
 
