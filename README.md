@@ -7,7 +7,7 @@ This PoC demonstrates the use of the following technologies:
 * Mockito
 * RabbitMQ (exchanges, ques, producers, consumers)
 
-## Patient Management System
+## Patient Triage System
 This PoC demonstrates the use of the following technologies:
 * Spring 6 & Spring Boot 3 (HttpExchange)
 
