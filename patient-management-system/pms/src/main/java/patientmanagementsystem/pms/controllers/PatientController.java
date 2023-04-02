@@ -23,7 +23,7 @@ import patientmanagementsystem.pms.services.IPatientService;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/patients")
+@RequestMapping("/pms/patients")
 public class PatientController {
 
     private final IPatientService patientService;

@@ -7,5 +7,9 @@ This PoC demonstrates the use of the following technologies:
 * Mockito
 * RabbitMQ (exchanges, ques, producers, consumers)
 
+## Patient Management System
+This PoC demonstrates the use of the following technologies:
+* Spring 6 & Spring Boot 3 (HttpExchange)
+
 ## Spring Security
 Playground for learning spring security
