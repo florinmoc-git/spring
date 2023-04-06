@@ -1,5 +1,7 @@
 package patientmanagementsystem.pms.controllers.error_handling;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatchException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.core.Ordered;
@@ -67,4 +69,12 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         problemDetail.setProperty("subErrors", apiValidationErrors);
         return ResponseEntity.of(problemDetail).build();
     }
+
+    @ExceptionHandler({JsonPatchException.class, JsonProcessingException.class})
+    public ResponseEntity<Object> handleJsonPatchProcessingExceptions(){
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setProperty("message", "Could not parse JSON payload!");
+        return ResponseEntity.of(problemDetail).build();
+    }
+
 }

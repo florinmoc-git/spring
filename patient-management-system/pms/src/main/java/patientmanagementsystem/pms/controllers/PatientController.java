@@ -10,7 +10,6 @@ import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.validation.Valid;
 import org.springframework.core.MethodParameter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
@@ -85,15 +84,12 @@ public class PatientController {
     // Also, updating an object in an array relies on the position of said object in array. But how
     // confident can we be that the order of the objects in the array will always be the same?
     @PatchMapping(path = "/update-json-patch/{id}", consumes = "application/json-patch+json")
-    public ResponseEntity<Patient> updatePatient(@PathVariable int id, @RequestBody JsonPatch patch) {
-        try {
-            Patient Patient = patientService.getPatientById(id);
-            Patient PatientPatched = applyPatchToPatient(patch, Patient);
-            patientService.updatePatient(PatientPatched);
-            return ResponseEntity.ok(PatientPatched);
-        } catch (JsonPatchException | JsonProcessingException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+    public ResponseEntity<Patient> updatePatient(@PathVariable int id, @RequestBody JsonPatch patch)
+            throws JsonPatchException, JsonProcessingException {
+        Patient Patient = patientService.getPatientById(id);
+        Patient PatientPatched = applyPatchToPatient(patch, Patient);
+        patientService.updatePatient(PatientPatched);
+        return ResponseEntity.ok(PatientPatched);
     }
 
     private Patient applyPatchToPatient(
@@ -103,5 +99,4 @@ public class PatientController {
         JsonNode patched = patch.apply(objectMapper.convertValue(targetPatient, JsonNode.class));
         return objectMapper.treeToValue(patched, Patient.class);
     }
-
 }
