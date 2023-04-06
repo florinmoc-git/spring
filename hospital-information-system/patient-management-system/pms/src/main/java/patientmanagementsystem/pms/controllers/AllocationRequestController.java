@@ -1,11 +1,11 @@
 package patientmanagementsystem.pms.controllers;
 
+import com.his.entities.Patient;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import patientmanagementsystem.pms.entities.Patient;
 import patientmanagementsystem.pms.rabbitmq.AllocationRequestConsumer;
 import patientmanagementsystem.pms.rabbitmq.PatientToDepartmentAllocator;
 import patientmanagementsystem.pms.services.IPatientService;

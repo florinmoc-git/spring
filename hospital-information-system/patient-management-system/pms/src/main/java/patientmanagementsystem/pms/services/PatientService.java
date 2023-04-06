@@ -1,10 +1,10 @@
 package patientmanagementsystem.pms.services;
 
+import com.his.entities.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
-import patientmanagementsystem.pms.entities.Patient;
 import patientmanagementsystem.pms.repos.PatientRepo;
 
 import java.util.Map;

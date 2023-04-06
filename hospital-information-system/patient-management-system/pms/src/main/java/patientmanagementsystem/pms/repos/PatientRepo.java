@@ -1,8 +1,8 @@
 package patientmanagementsystem.pms.repos;
 
 
+import com.his.entities.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
-import patientmanagementsystem.pms.entities.Patient;
 
 public interface PatientRepo extends JpaRepository<Patient, Integer> {
 }

@@ -1,6 +1,6 @@
 package patientmanagementsystem.pms.services;
 
-import patientmanagementsystem.pms.entities.MedicalExamination;
+import com.his.entities.MedicalExamination;
 
 
 public interface IMedicalExaminationService {

@@ -1,8 +1,8 @@
 package patientmanagementsystem.pms.controllers;
 
+import com.his.entities.MedicalExamination;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import patientmanagementsystem.pms.entities.MedicalExamination;
 import patientmanagementsystem.pms.services.IMedicalExaminationService;
 import patientmanagementsystem.pms.services.IPatientService;
 

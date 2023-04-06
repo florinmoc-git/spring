@@ -1,10 +1,10 @@
 package patientmanagementsystem.pms.rabbitmq;
 
+import com.his.entities.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
-import patientmanagementsystem.pms.entities.Patient;
 
 /**
  * Retrieves a patient from a department queue for further processing

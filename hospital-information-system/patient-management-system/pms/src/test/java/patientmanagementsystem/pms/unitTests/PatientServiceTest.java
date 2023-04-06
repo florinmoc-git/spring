@@ -1,5 +1,6 @@
 package patientmanagementsystem.pms.unitTests;
 
+import com.his.entities.Patient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,7 +9,6 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import patientmanagementsystem.pms.entities.Patient;
 import patientmanagementsystem.pms.repos.PatientRepo;
 import patientmanagementsystem.pms.services.PatientService;
 

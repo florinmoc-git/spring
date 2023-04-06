@@ -1,5 +1,6 @@
 package patientmanagementsystem.pms.integrationTests;
 
+import com.his.entities.Patient;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -10,7 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import patientmanagementsystem.pms.controllers.PatientController;
-import patientmanagementsystem.pms.entities.Patient;
 import patientmanagementsystem.pms.services.IPatientService;
 
 import java.util.NoSuchElementException;

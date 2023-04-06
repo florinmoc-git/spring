@@ -1,6 +1,6 @@
 package patientmanagementsystem.pms.services;
 
-import patientmanagementsystem.pms.entities.Patient;
+import com.his.entities.Patient;
 
 import java.util.Map;
 

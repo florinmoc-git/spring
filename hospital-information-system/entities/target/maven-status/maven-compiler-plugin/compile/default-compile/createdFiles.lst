@@ -1,0 +1,17 @@
+com\his\entities\Ward.class
+com\his\entities\Therapy.class
+com\his\enums\DepartmentType.class
+com\his\Main.class
+com\his\entities\Prescription.class
+com\his\entities\Surgery.class
+com\his\entities\Patient.class
+com\his\entities\MedicalExamination.class
+com\his\entities\Staff.class
+com\his\entities\Doctor.class
+com\his\entities\Nurse.class
+com\his\enums\DoctorSpeciality.class
+com\his\entities\Person.class
+com\his\enums\NurseLevel.class
+com\his\enums\Sex.class
+com\his\entities\embedables\Address.class
+com\his\entities\Illness.class

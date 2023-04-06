@@ -1,7 +1,7 @@
 package patientmanagementsystem.pms.services;
 
+import com.his.entities.MedicalExamination;
 import org.springframework.stereotype.Service;
-import patientmanagementsystem.pms.entities.MedicalExamination;
 import patientmanagementsystem.pms.repos.MedicalExaminationRepo;
 
 @Service
