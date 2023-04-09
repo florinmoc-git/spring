@@ -1,0 +1,25 @@
+version: '2'
+services:
+    patient-admin-backend:
+        container_name: patient-admin-backend
+        build:
+            context: patient-admin
+            dockerfile: Dockerfile
+        image: patient-admin-backend:latest
+        ports:
+            - 8081:8081
+        networks:
+            - patient-admin-network
+    patient-admin-frontend:
+        container_name: patient-admin-frontend
+        build:
+            context: his
+            dockerfile: Dockerfile
+        image: patient-admin-frontend:latest
+        ports:
+            - 81:80
+        networks:
+            - patient-admin-network
+networks:
+    patient-admin-network:
+        driver: bridge
