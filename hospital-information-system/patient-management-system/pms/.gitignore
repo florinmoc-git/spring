@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/pms-frontend/build/
+/src/main/pms-frontend/node/
+/src/main/pms-frontend/node_modules/
