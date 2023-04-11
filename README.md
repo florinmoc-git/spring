@@ -2,6 +2,7 @@
 ## Patient Management System
 This PoC demonstrates the use of the following technologies:
 * Spring 6 & Spring Boot 3 (ProblemDetail, ObservationRegistry)
+* React App embedded into Spring Boot app
 * JPA (Hibernate)
 * JUnit 5 (Jupiter) - unit, integration and end-to-end tests
 * Mockito

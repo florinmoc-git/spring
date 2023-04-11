@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import patientmanagementsystem.pms.rabbitmq.PatientToDepartmentAllocator;
 import patientmanagementsystem.pms.services.IPatientService;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/pms/patients")
+@CrossOrigin
 public class PatientController {
 
     private final IPatientService patientService;
@@ -33,6 +35,11 @@ public class PatientController {
         this.patientService = patientService;
         this.patientToDepartmentAllocator = patientToDepartmentAllocator;
         this.observationRegistry = observationRegistry;
+    }
+
+    @GetMapping("/get/all")
+    public List<Patient> getAllPatients(){
+        return patientService.getAllPatients();
     }
 
     @GetMapping("/get/{id}")

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 import patientmanagementsystem.pms.repos.PatientRepo;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -67,6 +68,11 @@ public class PatientService implements IPatientService {
 //            }
         });
         return patientRepo.save(patient);
+    }
+
+    @Override
+    public List<Patient> getAllPatients() {
+        return patientRepo.findAll();
     }
 
 }

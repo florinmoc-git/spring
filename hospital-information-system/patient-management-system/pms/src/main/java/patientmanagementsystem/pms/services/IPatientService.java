@@ -2,6 +2,7 @@ package patientmanagementsystem.pms.services;
 
 import com.his.entities.Patient;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IPatientService {
@@ -38,4 +39,5 @@ public interface IPatientService {
 
     Patient updatePatientPatch(int patientId, Map<String, Object> fields);
 
+    List<Patient> getAllPatients();
 }
