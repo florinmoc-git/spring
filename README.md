@@ -1,4 +1,14 @@
 # Proofs of concept
+
+## Spring Microservices
+* Spring 6
+* Spring Boot 3
+* Config Server
+* API Gateway
+* Service Registry (Netflix)
+* Zipkin
+* HttpExchange
+
 ## Patient Management System
 This PoC demonstrates the use of the following technologies:
 * Spring 6 & Spring Boot 3 (ProblemDetail, ObservationRegistry)
