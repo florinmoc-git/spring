@@ -12,6 +12,7 @@ import io.micrometer.observation.ObservationRegistry;
 import jakarta.validation.Valid;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,7 +25,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/pms/patients")
-@CrossOrigin
 public class PatientController {
 
     private final IPatientService patientService;
@@ -35,6 +35,11 @@ public class PatientController {
         this.patientService = patientService;
         this.patientToDepartmentAllocator = patientToDepartmentAllocator;
         this.observationRegistry = observationRegistry;
+    }
+
+    @GetMapping("/demo")
+    public String resource(Authentication a){
+        return "Resources...";
     }
 
     @GetMapping("/get/all")

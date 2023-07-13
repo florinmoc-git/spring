@@ -162,7 +162,11 @@ public class Client {
                 ))
                 .tokenSettings(TokenSettings.builder()
 //            .accessTokenFormat(OAuth2TokenFormat.REFERENCE) // opaque
-                        .accessTokenTimeToLive(Duration.ofHours(24)).build())
+//                        .refreshTokenTimeToLive(Duration.ofHours(24))
+                        .reuseRefreshTokens(false)
+//                        .accessTokenTimeToLive(Duration.ofHours(24))
+                        .accessTokenTimeToLive(Duration.ofSeconds(5))
+                        .build())
                 .build();
     }
 }
